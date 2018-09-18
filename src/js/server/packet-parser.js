@@ -3,10 +3,11 @@ const { has } =  require('ramda');
 
 const HEADER_LENGTH = 18;
 const TARGET_LENGTH = 25;
+const ENDIANESS = "little";
 
 const dataParser = () => {
   return new Parser()
-    .endianess("little")
+    .endianess(ENDIANESS)
     .uint8('DynamicDataId')
     .uint32('DynamicDataSize')
     .array('DynamicData', {
@@ -17,7 +18,7 @@ const dataParser = () => {
 
 const targetParser = () => {
   return new Parser()
-    .endianess("little")
+    .endianess(ENDIANESS)
     .uint8('HorseNo')
     .float('PosX')
     .float('PosY')
@@ -29,7 +30,7 @@ const targetParser = () => {
 
 const packetParser = () => {
   return new Parser()
-    .endianess("little")
+    .endianess(ENDIANESS)
     .uint8('VersionID')
     .uint8('TrackID')
     .uint8('RaceID')
@@ -52,7 +53,6 @@ const getPacketLengthInByte = (packet) => {
     throw new Error('getPacketLengthInByte invalid input');
   }
   const length = HEADER_LENGTH + packet.TargetCount *TARGET_LENGTH + packet.DynamicDataSize;
-  // console.log('Packet length', length);
   return length;
 };
 

@@ -1,8 +1,8 @@
 const status = require('http-status');
-const { isEmpty } = require('ramda');
+const { isEmpty, isNil } = require('ramda');
 
 const sendJson = (res, data) => {
-  if(!data || isEmpty(data)) {
+  if(!data || isEmpty(data) || isNil(data)) {
     res.status(status.NOT_FOUND);
     return;
   }

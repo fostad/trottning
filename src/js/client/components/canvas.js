@@ -1,9 +1,5 @@
 import React from "react";
-
-const colors = [
-  "red", "blue", "green", "black", "yellow", "cyan", "#3d482f", "#903e5a", "#cb738d",
-  "#efa5a9", "#7f9fd0", "#6760aa"
-]; //TODO better colors
+import { colors, POSX_OFFSET, POSY_OFFSET } from '../../config';
 
 class Canvas extends React.Component {
   constructor() {
@@ -23,12 +19,11 @@ class Canvas extends React.Component {
 
   updateCanvas() {
     const { targets } = this.props;
-    console.log('targets', targets);
     if(targets && targets.length > 0) {
       const ctx = this.refs.canvas.getContext('2d');
       targets.forEach(target => {
         ctx.fillStyle=colors[target.HorseNo];
-        ctx.fillRect(target.PosX + 800, target.PosY + 500, 1, 1); //TODO offset in config
+        ctx.fillRect(target.PosX + POSX_OFFSET, target.PosY + POSY_OFFSET, 1, 1);
       });
     }
   }

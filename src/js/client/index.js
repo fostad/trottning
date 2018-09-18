@@ -16,7 +16,6 @@ const store = createStore(reducer);
 const initializeStates = () => {
   getPackets()
     .then(packets => {
-      // console.log('initialize packets', packets);
       store.dispatch(savePackets(packets));
     });
 };

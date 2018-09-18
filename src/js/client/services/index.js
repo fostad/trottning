@@ -1,5 +1,4 @@
-const baseUri = 'http://localhost:8080/'; //TODO
-
+const { SERVER_URI } = require('../../config.js');
 const _fetch = (uri, {
   method, body
 }) => {
@@ -15,7 +14,7 @@ const _fetch = (uri, {
 
   console.log(method + uri);
 
-  return fetch(baseUri + uri, params)
+  return fetch(SERVER_URI + uri, params)
     .then(function(response) {
       if(response.status === 404) {
         return Promise.resolve();
@@ -26,7 +25,8 @@ const _fetch = (uri, {
       }
 
       return response.json();
-    });
+    })
+    .catch(e => console.log(e));
 };
 
 const _get = (uri) => {

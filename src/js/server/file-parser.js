@@ -38,7 +38,6 @@ const parseBuf = (buf) => {
     packets.push(Object.assign(parsedPacket, {Timestamp: calcTime(parsedPacket.Timestamp)}));
     i = i + getPacketLengthInByte(parsedPacket)*2;
   }
-  // const mapedPacket = packets.map(p => p.Timestamp);
   console.log('packets', JSON.stringify(packets, null, 4));
   console.log('packets length', packets.length);
   return packets;

@@ -65,8 +65,7 @@ class App extends React.Component {
 }
 
 export default connect(state => {
-  console.log('state', state);
   return {
-    packets: state.packets //todo sort them
+    packets: state.packets // TODO sort this based on time
   };
 }, null) (App);
