@@ -1,12 +1,12 @@
 const webpack = require('webpack');
 const webpackDevMiddleware = require('webpack-dev-middleware');
-const webpackConfig = require ('../../../webpack.config');
 const express = require('express');
+const { map } = require('ramda');
+
+const webpackConfig = require ('../../../webpack.config');
 const fileParser = require('./file-parser');
 const packetsDB = require('./db/packets');
-const { PORT } = require('../config');
-
-const FILENAME = 'trotting.bin';
+const { PORT, BIN_FILENAME, JSON_FILENAME } = require('../config');
 
 const app = express();
 
@@ -19,7 +19,15 @@ const devCompiler = webpackDevMiddleware(compiler, {
 });
 
 try {
-  packetsDB.setPackets(fileParser.parseFile(FILENAME));
+  const packets = fileParser.parseFile(BIN_FILENAME);
+  fileParser.writeJsonFile(JSON_FILENAME, packets);
+  const mappedPackets = map(packet => {
+    return {
+      Timestamp: packet.Timestamp,
+      Targets: packet.Targets
+    };
+  } ,packets);
+  packetsDB.setPackets(mappedPackets);
 } catch (e) {
   console.log(e);
 }

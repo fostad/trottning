@@ -4,19 +4,28 @@ const moment = require('moment');
 const { packetParser, getPacketLengthInByte } = require('./packet-parser');
 
 const parsePacket = (buf) => {
-  return packetParser().parse(buf);
+  try {
+    return packetParser().parse(buf);
+  } catch (e) {
+    throw e;
+  }
 };
 
 const readFile = (filename) => {
   if(!filename) {
     throw new Error('readFile filename is missing');
   }
-  const filepath = path.join('bins', filename);
-  console.log('filepath', filepath);
-  const binary = fs.readFileSync(filepath);
-  const buf = Buffer.from(binary, 'bin');
-  console.log('buf.length', buf.length);
-  return buf;
+  try {
+    const filepath = path.join('bins', filename);
+    console.log('filepath', filepath);
+    const binary = fs.readFileSync(filepath);
+    const buf = Buffer.from(binary, 'bin');
+    console.log('buf.length', buf.length);
+    return buf;
+  } catch (e) {
+    throw e;
+  }
+
 };
 
 const calcTime = (timestamp) => {
@@ -31,23 +40,41 @@ const parseBuf = (buf) => {
     throw new Error('parseFile the buffer is empty or missing');
   }
 
-  let i = 0;
-  let packets = [];
-  while (i < buf.length) {
-    const parsedPacket = parsePacket(buf.slice(i));
-    packets.push(Object.assign(parsedPacket, {Timestamp: calcTime(parsedPacket.Timestamp)}));
-    i = i + getPacketLengthInByte(parsedPacket)*2;
+  try {
+    let i = 0;
+    let packets = [];
+    while (i < buf.length) {
+      const parsedPacket = parsePacket(buf.slice(i));
+      packets.push(Object.assign(parsedPacket, {Timestamp: calcTime(parsedPacket.Timestamp)}));
+      i = i + getPacketLengthInByte(parsedPacket)*2;
+    }
+    console.log('packets', JSON.stringify(packets, null, 4));
+    console.log('packets length', packets.length);
+    return packets;
+  } catch (e) {
+    throw e;
   }
-  console.log('packets', JSON.stringify(packets, null, 4));
-  console.log('packets length', packets.length);
-  return packets;
 };
 
 const parseFile = (filename) => {
-  const packetsBuf = readFile(filename);
-  return parseBuf(packetsBuf);
+  try {
+    const packetsBuf = readFile(filename);
+    return parseBuf(packetsBuf);
+  } catch (e) {
+    throw e;
+  }
+};
+
+const writeJsonFile = (filename, data) => {
+  try {
+    const filepath = path.join('json', filename);
+    fs.writeFileSync(filepath, JSON.stringify(data), 'utf8');
+  } catch (e) {
+    throw e;
+  }
 };
 
 module.exports = {
-  parseFile
+  parseFile,
+  writeJsonFile
 };
