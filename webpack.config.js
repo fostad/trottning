@@ -2,9 +2,9 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
 const HtmlWebpackPluginConfig = new HtmlWebpackPlugin({
-  template: './src/index.html',
-  filename: 'index.html',
-  inject: 'body'
+  template: './src/index.html'//,
+  // filename: 'index.html',
+  // inject: 'body'
 });
 
 module.exports = {
@@ -12,8 +12,9 @@ module.exports = {
     './src/js/client/index.js'
   ],
   output: {
-    path: path.resolve('dist'),
-    filename: 'index_bundle.js'
+    path: path.resolve(__dirname, 'dist'),
+    filename: 'index_bundle.js',
+    publicPath: '/'
   },
   node: {
     dns: 'mock',
@@ -29,6 +30,9 @@ module.exports = {
       { test: /\.jsx$/, loader: 'babel-loader', exclude: /node_modules/ },
       { test: /\.css$/, loader: "style-loader!css-loader" }
     ]
+  },
+  devServer: {
+    historyApiFallback: true,
   },
   plugins: [
     HtmlWebpackPluginConfig,

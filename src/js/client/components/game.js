@@ -2,11 +2,12 @@ import React from "react";
 import { connect } from "react-redux";
 import moment from 'moment';
 
-import Canvas from './components/canvas';
+import Canvas from './canvas';
 
-class App extends React.Component {
+let timer;
+
+class Game extends React.Component {
   constructor() {
-    console.log('App did mount');
     super();
     this.state = {
       index: 0,
@@ -37,12 +38,11 @@ class App extends React.Component {
 
   updateTargets() {
     console.log('startTimer');
-    const { index } = this.state;
     const { packets } = this.props;
     const timeDiff = moment(packets[1].Timestamp).diff(moment(packets[0].Timestamp));
     console.log('timeDiff', timeDiff);
-    const timer = setInterval(() => {
-      if(index >= packets.length) {
+    timer = setInterval(() => {
+      if(this.state.index >= packets.length - 1) {
         clearInterval(timer);
       } else {
         this.setState({
@@ -50,6 +50,10 @@ class App extends React.Component {
         });
       }
     }, timeDiff);
+  }
+
+  componentWillUnmount() {
+    clearInterval(timer);
   }
 
   render() {
@@ -68,4 +72,4 @@ export default connect(state => {
   return {
     packets: state.packets // TODO sort this based on time
   };
-}, null) (App);
+}, null) (Game);

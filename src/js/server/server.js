@@ -32,7 +32,6 @@ try {
   console.log(e);
 }
 
-
 app.use(devCompiler);
 
 require('./routes/packet-routes')(app);
